@@ -1,0 +1,20 @@
+install.packages("ggplot2")
+
+library(ggplot2)
+
+data(airquality)
+df <- na.omit(airquality)
+
+hist(df$Temp, main = "Histogram of Temperature", col = "skyblue", border = "white", xlab = "Temperature")
+
+boxplot(df$Ozone, main = "Boxplot of Ozone", col = "orange")
+
+plot(density(df$Wind), main = "Density of Wind Speed", col = "darkgreen", lwd = 2)
+
+month_count <- table(df$Month)
+barplot(month_count, main = "Barplot of Months", col = c("red", "blue", "green", "purple", "cyan"))
+
+ggplot(df, aes(x = Temp, y = Ozone, color = factor(Month))) +
+  geom_point(size = 3) +
+  theme_minimal() +
+  labs(title = "Scatter Plot (Ozone vs Temp by Month)", color = "Month")

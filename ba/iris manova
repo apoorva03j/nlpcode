@@ -1,0 +1,22 @@
+data(iris)
+df <- iris[, -5]
+cor_matrix <- cor(df)
+print(cor_matrix)
+
+plot(
+  df$Sepal.Length,
+  df$Petal.Length,
+  col = iris$Species,
+  main = "Bivariate Analysis",
+  xlab = "Sepal Length",
+  ylab = "Petal Length"
+)
+
+pairs(
+  df,
+  col = iris$Species,
+  main = "Multivariate Scatterplot Matrix"
+)
+
+fit <- manova(cbind(Sepal.Length, Sepal.Width, Petal.Length, Petal.Width) ~ Species, data = iris)
+summary(fit)

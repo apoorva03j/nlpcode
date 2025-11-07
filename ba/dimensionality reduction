@@ -1,0 +1,44 @@
+install.packages("ggplot2")
+install.packages("kernlab")
+install.packages("ggfortify")
+
+library(ggplot2)
+library(kernlab)
+library(ggfortify)
+
+data(mtcars)
+df <- scale(mtcars)
+
+pca_result <- prcomp(df, scale. = TRUE)
+summary(pca_result)
+
+autoplot(
+  pca_result,
+  data = as.data.frame(df),
+  loadings = TRUE,
+  loadings.label = TRUE,
+  loadings.colour = "blue",
+  loadings.label.size = 4,
+  main = "PCA Biplot - mtcars (Enhanced)"
+)
+
+kpca_result <- kpca(~., data = as.data.frame(df), kernel = "rbfdot")
+kpca_df <- as.data.frame(rotated(kpca_result))
+kpca_df$Car <- rownames(df)
+
+ggplot(kpca_df, aes(x = V1, y = V2, label = Car)) +
+  geom_point(color = "steelblue", size = 3) +
+  geom_text(vjust = -0.5, size = 3) +
+  theme_minimal() +
+  labs(title = "Kernel PCA (First 2 Components) - mtcars", x = "PC1", y = "PC2")
+
+svd_result <- svd(df)
+print(svd_result$d)
+
+svd_df <- data.frame(U1 = svd_result$u[,1], U2 = svd_result$u[,2], Car = rownames(df))
+
+ggplot(svd_df, aes(x = U1, y = U2, label = Car)) +
+  geom_point(color = "darkgreen", size = 3) +
+  geom_text(vjust = -0.5, size = 3) +
+  theme_minimal() +
+  labs(title = "SVD Components - mtcars", x = "U1", y = "U2")
